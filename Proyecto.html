@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro Congreso ASTRA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="stylemenu.css"> <!-- Corregido aquí -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Boxicons CSS -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <!-- Barra de menú -->
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="chuy1.gif" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name"><-- Este es chuy</span>
+                    <span class="profession">Perfil de maestro</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="search" placeholder="Search...">
+                </li>
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-home-alt icon'></i>
+                            <span class="text nav-text">Perfil</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-user icon'></i>
+                            <span class="text nav-text">Conocenos</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-calendar icon'></i>
+                            <span class="text nav-text">Talleres</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-calendar-event icon'></i>
+                            <span class="text nav-text">Fechas</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-cog icon'></i>
+                            <span class="text nav-text">Complementos</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-slider-alt icon'></i>
+                            <span class="text nav-text">Ajustes</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li class="nav-link">
+                    <a href="#">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text nav-text">Log out</span>
+                    </a>
+                </li>
+                <li class="mode">
+                    <div class="moon-sun">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Dark mode</span>
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <script src="Interfaz.js"></script>
+   
+
+    <!-- Contenedor del formulario -->
+    <div class="container">
+        <div class="title">Registro</div>
+        <form action="#">
+            <div class="user-detalles">
+                <div class="input-box">
+                    <span class="detalles">Nombre</span>
+                    <input type="text" placeholder="Ingresa tu nombre(s)" required>
+                </div>
+                <div class="input-box">
+                    <span class="detalles">Apellidos</span>
+                    <input type="text" placeholder="Ingresa tus apellidos" required>
+                </div>
+                <div class="input-box">
+                    <span class="detalles">Numero de control</span>
+                    <input type="text" name="numeroControl" placeholder="Ingresa tu No. Control" required>
+                </div>
+                <div class="input-box">
+                    <span class="detalles">Correo electronico</span>
+                    <input type="text" placeholder="Ingresa tu correo" required>
+                </div>
+                <div class="input-box">
+                    <span class="detalles">Telefono (Contacto)</span>
+                    <input type="text" placeholder="Ingresa tu telefono" required>
+                </div>
+                <div class="input-box">
+                    <span class="detalles">Numero de Boleto</span>
+                    <input type="text" name="numeroBoleto" placeholder="Ingresa tu No. Boleto" required>
+                </div>
+            </div>
+
+            <div class="camisa-detalles">
+                <input type="radio" name="camisa" id="dot-1" value="S">
+                <input type="radio" name="camisa" id="dot-2" value="M">
+                <input type="radio" name="camisa" id="dot-3" value="G">
+                <input type="radio" name="camisa" id="dot-4" value="XG">
+                <span class="camisa-title">Talla de camisa</span>
+                <div class="category">
+                    <label for="dot-1">
+                        <span class="dot one"></span>
+                        <span class="camisa">Pequeña</span>
+                    </label>
+                    <label for="dot-2">
+                        <span class="dot two"></span>
+                        <span class="camisa">Mediana</span>
+                    </label>
+                    <label for="dot-3">
+                        <span class="dot three"></span>
+                        <span class="camisa">Grande</span>
+                    </label>
+                    <label for="dot-4">
+                        <span class="dot four"></span>
+                        <span class="camisa">Extra Grande</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="button">
+                <input type="submit" value="Register">
+            </div>
+
+            
+            </form>
+
+            <script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.min.js"></script>
+        
+
+        </div>
+
+        <!-- Carga de scripts (fuera del formulario) -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-styling/lib/qrcode-styling.min.js"></script>
+    <script src="Qr.js"></script>
+
+      <!--  <script src="chuy.js"></script>    --> 
+
+
+    <script src="registro.js"> </script>   
+    <script src="Validacion.js"></script>
+</body>
+</html>
