@@ -1,253 +1,345 @@
+/* =========================================
+   IMPORTACIÓN DE FUENTES
+   Carga la familia tipográfica global para la interfaz
+   ========================================= */
 @import url('https://fonts.googleapis.com/css?family=Poppins');
+/* ============= Aqui termina seccion IMPORTACIÓN DE FUENTES ============= */
+
+
+/* =========================================
+   RESET GLOBAL (solo tipografía y box model)
+   No modifica layout del body ni posiciones
+   ========================================= */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
+/* ============= Aqui termina seccion RESET GLOBAL ============= */
 
-body{
-    height: 100hv;
-    transition: var(--trans-04);
-}
 
+/* =========================================
+   VARIABLES – MODO OSCURO ÚNICO (solo menú)
+   ========================================= */
 :root {
-    /*==Colores==*/
-    --body-color: #E4E9F7;
-    --sidebar-color: #FFF;
-    --primary-color: #695CFE;
-    --primary-color-light: #F6F5FF;
-    --toggle-color: #DDD;
-    --text-color: #707070;
+  --sidebar-color: #242526;
+  --primary-color: #3A3BFF;        /* morado consistente */
+  --primary-color-light: #2B2E4A;  /* superficie interna oscura */
+  --toggle-color: #FFF;
+  --text-color: #CCC;
 
-    /*==Transition==*/
-    --trans-02: all 0.2s ease;
-    --trans-03: all 0.3s ease;
-    --trans-04: all 0.4s ease;
-    --trans-05: all 0.5s ease;
+  --trans-02: all .2s ease;
+  --trans-03: all .3s ease;
+  --trans-04: all .4s ease;
+  --trans-05: all .5s ease;
 }
+/* ============= Aqui termina seccion VARIABLES – MODO OSCURO ÚNICO ============= */
 
-body.dark {
-    --body-color: #18191A;
-    --sidebar-color: #242526;
-    --primary-color: #3A3B3C;
-    --primary-color-light: #3A3B3C;
-    --toggle-color: #FFF;
-    --text-color: #CCC;
-}
 
-/* SIDEBAR */
+/* =========================================
+   CONTENEDOR DE LA SIDEBAR
+   Dimensiones, posición fija y comportamiento colapsado
+   ========================================= */
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 250px;
-    padding: 10px 14px;
-    background: var(--sidebar-color);
-    transition: var(--trans-05);
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 250px;
+  padding: 10px 14px;
+  background: var(--sidebar-color);
+  transition: var(--trans-05);
+  z-index: 1000;
 }
+.sidebar.close { width: 88px; }
+/* ============= Aqui termina seccion CONTENEDOR DE LA SIDEBAR ============= */
 
-.sidebar.close {
-    width: 88px;
-}
 
-/* Reusable CSS */
+/* =========================================
+   ESTILOS REUTILIZABLES EN LA SIDEBAR
+   Tipografías, íconos, estados al colapsar
+   ========================================= */
 .sidebar .text {
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--text-color);
-    transition: var(--trans-03);
-    white-space: nowrap;
-    opacity: 1;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-color);
+  transition: var(--trans-03);
+  white-space: nowrap;
+  opacity: 1;
 }
-
-.sidebar.close .text {
-    opacity: 0;
-}
+.sidebar.close .text { opacity: 0; }
 
 .sidebar .image {
-    min-width: 60px;
-    display: flex;
-    align-items: center;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
 }
 
 .sidebar li {
-    height: 50px;
-    margin-top: 10px;
-    list-style: none;
-    display: flex;
-    align-items: center;
+  height: 50px;
+  margin-top: 10px;
+  list-style: none;
+  display: flex;
+  align-items: center;
 }
 
 .sidebar li .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 60px;
-    font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  font-size: 20px;
 }
 
 .sidebar li .icon,
 .sidebar li .text {
-    color: var(--text-color);
-    transition: var(--trans-02);
+  color: var(--text-color);
+  transition: var(--trans-02);
 }
+/* ============= Aqui termina seccion ESTILOS REUTILIZABLES EN LA SIDEBAR ============= */
 
-.sidebar header {
-    position: relative;
-}
+
+/* =========================================
+   HEADER DE LA SIDEBAR
+   Logo, texto del perfil y botón de toggle
+   ========================================= */
+.sidebar header { position: relative; }
 
 .sidebar .image-text img {
-    width: 40px;
-    border-radius: 6px;
+  width: 40px;
+  border-radius: 6px;
 }
 
 .sidebar header .image-text {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 header .image-text .header-text {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-.header-text .name {
-    font-weight: 600;
-}
-
-.header-text .profession {
-    margin-top: -2px;
-}
+.header-text .name { font-weight: 600; }
+.header-text .profession { margin-top: -2px; }
 
 .sidebar header .toggle {
-    position: absolute;
-    top: 50%;
-    right: -25px;
-    transform: translateY(-50%) rotate(180deg);
-    height: 25px;
-    width: 25px;
-    background: var(--primary-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    color: var(--sidebar-color);
-    font-size: 22px;
-    transition: var(--trans-03);
+  position: absolute;
+  top: 50%;
+  right: -25px;
+  transform: translateY(-50%) rotate(180deg);
+  height: 25px;
+  width: 25px;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 22px;
+  transition: var(--trans-03);
 }
+.sidebar.close header .toggle { transform: translateY(-50%); }
+/* ============= Aqui termina seccion HEADER DE LA SIDEBAR ============= */
 
-.sidebar.close header .toggle{
-    transform: translateY(-50%);
-}
 
-body.dark .sidebar header .toggle{
-    transform: rotate(180deg);
-    color: var(--text-color);
-}
-
+/* =========================================
+   BUSCADOR
+   Caja de búsqueda dentro del menú
+   ========================================= */
 .sidebar .search-box {
-    background: var(--primary-color-light);
-    border-radius: 6px;
+  background: var(--primary-color-light);
+  border-radius: 6px;
 }
-
 .search-box input {
-    height: 100%;
-    width: 100%;
-    outline: none;
-    border: none;
-    border-radius: 6px;
-    background: var(--primary-color-light);
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 6px;
+  background: var(--primary-color-light);
+  color: var(--text-color);
 }
+/* ============= Aqui termina seccion BUSCADOR ============= */
 
+
+/* =========================================
+   ENLACES DE NAVEGACIÓN
+   <a> del menú y su estado hover + activo
+   ========================================= */
 .sidebar li a {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    border-radius: 6px;
-    transition: var(--trans-04);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: var(--trans-04);
 }
-
-.sidebar li a:hover {
-    background: var(--primary-color);
-}
-
+.sidebar li a:hover { background: var(--primary-color); }
 .sidebar li a:hover .icon,
-.sidebar li a:hover .text {
-    color: var(--sidebar-color);
-}
+.sidebar li a:hover .text { color: #ffffff; }
 
-body.dark .sidebar li a:hover .icon,
-body.dark .sidebar li a:hover .text {
-    color: var(--text-color);
+/* estado activo (hash actual) */
+.sidebar li a.active {
+  background: var(--primary-color);
 }
+.sidebar li a.active .icon,
+.sidebar li a.active .text {
+  color: #fff;
+}
+/* ============= Aqui termina seccion ENLACES DE NAVEGACIÓN ============= */
 
+
+/* =========================================
+   CONTENEDOR DEL MENÚ (SUPERIOR/INFERIOR)
+   Distribuye contenido y oculta el switch de tema
+   ========================================= */
 .sidebar .menu-bar {
-    height: calc(100% - 50px);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  height: calc(100% - 50px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
+/* Oculta el bloque de modo (texto + switch) para evitar confusiones */
+.menu-bar .mode { display: none !important; }
+/* ============= Aqui termina seccion CONTENEDOR DEL MENÚ (SUPERIOR/INFERIOR) ============= */
 
-.menu-bar .mode {
-    position: relative;
-    border-radius: 6px;
-    background: var(--primary-color-light);
-}
 
-.menu-bar .mode .moon-sun {
-    height: 50px;
-    width: 60px;
-    display: flex;
-    align-items: center;
-}
-
-.menu-bar .mode i {
-    position: absolute;
-}
-
-.menu-bar .mode i.sun {
-    opacity: 0;
-}
-
-.menu-bar .mode .toggle-switch {
-    position: absolute;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    min-width: 60px;
-    cursor: pointer;
-    background: var(--primary-color-light);
-    border-radius: 6px;
-}
-
+/* =========================================
+   INTERRUPTOR DE MODO (SWITCH)
+   (Queda sin uso porque .mode está oculto)
+   ========================================= */
 .toggle-switch .switch {
-    position: relative;
-    height: 22px;
-    min-width: 44px;
-    border-radius: 25px;
-    background-color: var(--toggle-color);
+  position: relative;
+  height: 22px;
+  min-width: 44px;
+  border-radius: 25px;
+  background-color: var(--toggle-color);
+}
+.switch::before{
+  content:'';
+  position:absolute;
+  height:15px; width:15px; border-radius:50%;
+  top:50%; left:25px; transform:translateY(-50%);
+  background: var(--sidebar-color);
+  transition: var(--trans-03);
+}
+/* ============= Aqui termina seccion INTERRUPTOR DE MODO (SWITCH) ============= */
+
+
+/* =========================================
+   LAYOUT DEL CONTENIDO JUNTO A LA SIDEBAR
+   (Compensación lateral y superior + grillas)
+   ========================================= */
+
+/* 1) Compensar el ancho de la sidebar sobre el contenido.
+   Ajusta estos px a los de tu sidebar real. Suele ser 250px abierta y ~88-100px cerrada. */
+.sidebar + main {
+  padding-left: 260px;   /* ancho cuando la sidebar está abierta */
+  padding-right: 24px;
+  padding-top: 56px;     /* separa del borde superior (ajusta a gusto) */
+}
+.sidebar.close + main {
+  padding-left: 100px;   /* ancho cuando la sidebar está colapsada */
+  padding-top: 32px;     /* un poco menos de separación */
 }
 
-.switch::before {
-    content: '';
-    position: absolute;
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    top: 50%;
-    left: 5px;
-    transform: translateY(-50%);
-    background: var(--sidebar-color);
-    transition: var(--trans-03);
+/* 2) Centrar y limitar el ancho del contenedor del formulario */
+main .container {
+  width: min(1100px, calc(100% - 48px)); /* 1100px máx, con márgenes laterales responsivos */
+  margin: 40px auto 56px;                /* centrado + espacio superior */
 }
 
-body.dark .switch::before {
-    left: 25px;
+/* 3) Grillas del formulario (2 columnas arriba, 3 en calificaciones) */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 24px;
+}
+
+/* Si quieres que Semestre y Grupo ocupen todo el ancho dentro del grid: 
+   Mueve esos .input-box dentro de .form-grid y descomenta esto: */
+/*
+.form-grid .input-box--full { 
+  grid-column: 1 / -1; 
+}
+*/
+
+/* Calificaciones: 3 columnas en desktop, 1 en móvil */
+.grades-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px 24px;
+}
+@media (max-width: 900px) {
+  .grades-grid { grid-template-columns: 1fr; }
+  .form-grid   { grid-template-columns: 1fr; }
+}
+
+/* 4) Evitar desbordes/scroll horizontal accidental */
+html, body { overflow-x: hidden; }
+
+/* 5) Ajustes visuales menores */
+.container .title { margin-bottom: 14px; }
+.section-title { margin: 16px 0 8px; }
+.input-box input, .input-box select { width: 100%; }
+
+
+/* Desactiva el centrado del <body> que viene de style.css */
+body {
+  display: block !important;
+  align-items: initial !important;
+  justify-content: flex-start !important;
+  padding: 0 !important; /* el padding lo maneja main y la container */
+}
+
+/* Empuje superior real para que no quede pegado (ajusta a gusto) */
+.sidebar + main,
+.sidebar ~ main {
+  padding-top: 112px !important;
+}
+.sidebar.close + main,
+.sidebar.close ~ main {
+  padding-top: 50px !important;
+}
+
+/* Ajuste fino solo para la vista de Registro */
+#view-registro { 
+  padding-top: 16px !important;
+  scroll-margin-top: 120px; /* por si entras con #registro */
+}
+
+/* Asegura que el contenedor no esté “pegado” por position/top desde otros CSS */
+#view-registro > .container {
+  position: static !important;
+  top: auto !important;
+  margin-top: 16px !important;
+}
+
+/* Si usas una barra fija .logos en esta página, evita que tape el contenido */
+.logos {
+  position: static !important;   /* o elimina ese nodo en esta página */
+  height: auto !important;
+  width: auto !important;
+  left: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+/* ========== FIX: visibilidad de Boxicons en el sidebar ========== */
+.sidebar .nav-link i.bx {
+  color: #cfd8ff;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Si tienes una clase .icon que les pone background/width/height, neutralízalo en los <i> */
+.sidebar .nav-link i.icon {
+  background: transparent !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
 }

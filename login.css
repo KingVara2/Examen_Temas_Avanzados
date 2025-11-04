@@ -1,0 +1,372 @@
+/* ===============================
+   Variables base y reset
+   =============================== */
+:root{
+  --bg-1:#0b1021;
+  --bg-2:#0e1730;
+  --text:#eaf0ff;
+  --muted:#aab4d9;
+  --accent-1:#7b5cff;
+  --accent-2:#32e1ff;
+  --accent-3:#ff6fc6;
+  --ok:#6bffbd;
+  --danger:#ff5d86;
+
+  --radius:22px;
+  --blur:18px;
+
+  /* Animación de transición login <-> signup */
+  --slide-dur:.7s;
+  --slide-ease:cubic-bezier(.2,.65,.2,1);
+
+  /* Alturas para que Signup no se corte (ajústalas a tu gusto) */
+  --card-h: 660px;    /* altura mínima de la tarjeta */
+  --panel-h: 620px;   /* altura mínima del panel de formularios */
+}
+
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0;
+  color:var(--text);
+  font-family:"Outfit", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background:
+    radial-gradient(1300px 900px at 10% -10%, #1a1645 0%, transparent 60%),
+    radial-gradient(1000px 900px at 120% 10%, #162a5a 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  overflow-x:hidden;
+}
+
+/* ===============================
+   Fondo decorativo sutil
+   =============================== */
+.bg{ position:fixed; inset:0; z-index:-2; overflow:hidden }
+.bg .glow{
+  position:absolute;
+  filter: blur(90px);
+  mix-blend-mode: screen;
+  opacity:.6;
+  transform: translateZ(0);
+  animation: float 22s ease-in-out infinite;
+}
+.g1{ width:38vmax; height:38vmax; left:-10vmax; top:-8vmax; background:radial-gradient(closest-side, #7b5cff, transparent) }
+.g2{ width:42vmax; height:42vmax; right:-12vmax; top:-6vmax; background:radial-gradient(closest-side, #32e1ff, transparent); animation-duration: 26s }
+.bg .grid{
+  position:absolute; inset:-20%;
+  background:
+    repeating-linear-gradient(120deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 120px),
+    repeating-linear-gradient(60deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 140px);
+  opacity:.3;
+  transform: rotate(2deg) scale(1.2);
+}
+@keyframes float{
+  0%,100%{ transform: translate3d(0,0,0) }
+  50%{ transform: translate3d(4vmax,3vmax,0) }
+}
+
+/* ===============================
+   Layout general
+   =============================== */
+.wrap{
+  min-height:100svh;
+  display:grid;
+  place-items:center;
+  padding: 80px 18px 56px;
+}
+
+/* Tarjeta base (glass) */
+.card{
+  position: relative;
+  width: min(980px, 92vw); /* ancho controlado */
+  min-height: var(--card-h); /* MÁS ALTA */
+  padding: clamp(16px, 3vw, 22px);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+  border: 1px solid rgba(255,255,255,0.20);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.55),
+    inset 0 0 0 1px rgba(255,255,255,0.08);
+  backdrop-filter: blur(var(--blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+  overflow: hidden;
+}
+.card::before{
+  /* Borde luminoso animado alrededor de la tarjeta */
+  content:"";
+  position:absolute; inset:-2px;
+  border-radius: inherit;
+  background: conic-gradient(from 0deg,
+    color-mix(in oklab, var(--accent-1), #fff 8%),
+    color-mix(in oklab, var(--accent-2), #fff 8%),
+    color-mix(in oklab, var(--accent-3), #fff 8%),
+    color-mix(in oklab, var(--accent-1), #fff 8%)
+  );
+  filter: blur(14px) saturate(140%); opacity:.28;
+  animation: spin 18s linear infinite;
+  z-index:-1;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  padding:2px;
+  mask-composite: exclude; -webkit-mask-composite: xor;
+}
+@keyframes spin{ to{ transform: rotate(360deg) } }
+
+.title{
+  text-align:center;
+  font-weight:600;
+  letter-spacing:.4px;
+  font-size: clamp(1.45rem, 3.5vw, 2rem);
+  margin: 6px 0 18px;
+  text-shadow: 0 2px 14px rgba(0,0,0,.25);
+}
+
+/* ===============================
+   Estructura de paneles (Login/Signup)
+   =============================== */
+.auth{
+  display:grid;
+  grid-template-columns: 1.1fr 1fr; /* info | forms */
+  gap: clamp(12px, 2.4vw, 22px);
+  align-items: stretch;
+}
+
+/* Panel de información con "triángulo" suave */
+.panel{
+  position: relative;
+  border-radius: calc(var(--radius) - 8px);
+  overflow: hidden;
+}
+.panel-info{
+  padding: clamp(18px, 3vw, 28px);
+  display:grid;
+  align-content:center;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+  isolation: isolate;
+}
+.panel-info::after{
+  content:"";
+  position:absolute; inset: -20% -30% -20% auto;
+  width: 60%;
+  background: linear-gradient(135deg,
+    color-mix(in oklab, var(--accent-1), #fff 6%),
+    color-mix(in oklab, var(--accent-2), #fff 8%) 60%,
+    color-mix(in oklab, var(--accent-3), #fff 8%)
+  );
+  filter: blur(24px);
+  opacity:.15;
+  transform: skewX(-18deg);
+  pointer-events:none;
+}
+.info{ transition: opacity .28s ease, transform .28s ease; }
+.info-login{ opacity:1; transform: translateX(0) }
+.info-signup{ opacity:0; transform: translateX(12px) }
+.auth.signup .info-login{ opacity:0; transform: translateX(-12px) }
+.auth.signup .info-signup{ opacity:1; transform: translateX(0) }
+
+.info-title{ font-size: clamp(1.4rem, 3vw, 1.8rem); margin: 4px 0 10px }
+.info-text{ color: var(--muted); line-height:1.5 }
+
+/* ===============================
+   Panel de formularios con carrusel deslizante
+   =============================== */
+.panel-forms{
+  position:relative;
+  overflow:hidden;          /* oculta el panel que está “fuera” al deslizar */
+  display:grid;
+  min-height: var(--panel-h); /* MÁS ALTO para que no se corte signup */
+  padding-bottom: 10px;       /* colchón por sombras o bordes */
+}
+
+/* Ambas cajas comparten estilo base */
+.form-box{
+  width: 100%;
+  max-width: 480px;          /* ancho de la columna de formulario */
+  margin-inline:auto;
+  transition:
+    transform var(--slide-dur) var(--slide-ease),
+    opacity var(--slide-dur) var(--slide-ease),
+    filter var(--slide-dur) var(--slide-ease);
+}
+
+/* Estado base: se muestra login, signup fuera a la derecha */
+.form-login{ transform: translateX(0); opacity:1; filter: blur(0) }
+.form-signup{ position:absolute; inset:0; transform: translateX(120%); opacity:0; filter: blur(10px) }
+
+/* Al activar signup, invertimos */
+.auth.signup .form-login{ transform: translateX(-120%); opacity:0; filter: blur(10px) }
+.auth.signup .form-signup{ transform: translateX(0); opacity:1; filter: blur(0) }
+
+/* ===============================
+   Campos del formulario (reuso de tu estilo)
+   =============================== */
+.form{ display:block }
+.field{ position:relative; margin: 14px 0 24px }
+.field input{
+  width:100%;
+  padding: 18px 48px 14px 16px;
+  color: var(--text);
+  background: rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius: 14px;
+  outline: none;
+  transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+}
+.field input::placeholder{ color: transparent }
+.field label{
+  position:absolute; top:50%; left:16px; transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events:none; padding:0 6px;
+  background: linear-gradient(180deg, rgba(10,15,31,0), rgba(10,15,31,.45));
+  transition: transform .2s ease, top .2s ease, color .2s ease, font-size .2s ease;
+}
+.field .icon{
+  position:absolute; right:14px; top:50%; transform: translateY(-50%);
+  width:22px; height:22px; color: rgba(255,255,255,.8); pointer-events:none;
+}
+
+/* Focus y label flotante */
+.field input:focus{
+  border-color: color-mix(in oklab, var(--accent-2), white 15%);
+  background: rgba(255,255,255,0.06);
+  box-shadow: 0 0 0 6px rgba(54,225,255,0.10), inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+.field input:not(:placeholder-shown) + label,
+.field input:focus + label{
+  top:0; transform: translateY(-50%) scale(.88); font-size:.82rem;
+}
+
+/* Error */
+.error{
+  position:absolute; left:12px; bottom:-18px;
+  font-size:.8rem; color: var(--danger);
+  opacity:0; transform: translateY(-2px);
+  transition: opacity .2s ease, transform .2s ease;
+}
+.field.invalid .error{ opacity:1; transform: translateY(0) }
+.field.invalid input{
+  border-color: color-mix(in oklab, var(--danger), white 10%);
+  box-shadow: 0 0 0 6px rgba(255,93,134,0.10), inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+/* Extras */
+.extras{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  margin: 0 2px 12px; flex-wrap:wrap;
+}
+.check{ display:inline-flex; align-items:center; gap:10px; color:var(--muted); cursor:pointer }
+.check input{
+  appearance:none; width:18px; height:18px; border-radius:6px;
+  border:1px solid rgba(255,255,255,0.35); background: rgba(255,255,255,0.05);
+  display:grid; place-items:center; transition: all .2s ease;
+}
+.check input::after{
+  content:""; width:10px; height:10px; border-radius:3px; transform: scale(0);
+  transition: transform .18s ease; background: linear-gradient(135deg, var(--ok), color-mix(in oklab, var(--ok), white 10%));
+  box-shadow: 0 0 10px rgba(107,255,189,.6);
+}
+.check input:checked{ border-color: color-mix(in oklab, var(--ok), white 10%); box-shadow: 0 0 0 4px rgba(107,255,189,.14) }
+.check input:checked::after{ transform: scale(1) }
+
+/* Enlaces y swap Login/Signup */
+.link{
+  color: color-mix(in oklab, var(--accent-2), white 10%);
+  text-decoration: none; border-bottom:1px dashed currentColor; padding-bottom:2px;
+  transition: color .2s ease;
+}
+.link:hover{ color: color-mix(in oklab, var(--accent-1), white 10%) }
+.swap{ margin: 14px 6px 0; color: var(--muted); text-align:center }
+
+/* Botón */
+.btn{
+  width:100%; border:0; border-radius: 999px;
+  padding: 14px 18px; font-weight:600; letter-spacing:.4px; color:#0b0f1d;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2) 55%, var(--accent-3));
+  box-shadow: 0 12px 26px rgba(58,247,255,.22), 0 4px 12px rgba(0,0,0,.35);
+  cursor:pointer; position:relative; overflow:hidden; transition: transform .15s ease, box-shadow .25s ease, filter .25s ease;
+}
+.btn::after{
+  /* Brillo que recorre el botón */
+  content:""; position:absolute; top:-60%; left:-30%; width:40%; height:220%; transform: rotate(25deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.95), transparent);
+  filter: blur(10px); animation: shine 3s ease-in-out infinite;
+}
+@keyframes shine{ 0%{ left:-40% } 100%{ left:120% } }
+.btn:hover{ transform: translateY(-1px); filter: saturate(110%) }
+
+/* Grid de 2 columnas en registro */
+.grid-2{
+  display:grid; grid-template-columns:1fr 1fr; gap:14px;
+}
+
+/* ===============================
+   Accesibilidad y responsive
+   =============================== */
+@media (prefers-reduced-motion: reduce){
+  .bg .glow, .card::before, .btn::after{ animation: none !important }
+  .form-box{ transition: none !important }
+}
+
+@media (max-width: 860px){
+  .auth{ grid-template-columns: 1fr; }
+  .panel-info{ order:2; text-align:center }
+  .panel-forms{ order:1; min-height: max(var(--panel-h), 620px) }
+  /* Slide vertical en móviles */
+  .form-signup{ transform: translateY(120%); }
+  .auth.signup .form-login{ transform: translateY(-120%); }
+  .auth.signup .form-signup{ transform: translateY(0); }
+  .grid-2{ grid-template-columns: 1fr }
+}
+
+/* ===============================
+   OVERRIDES: Altura y centrado vertical Login/Signup
+   - Mantienen tu transición y estilos actuales
+   - Solo ajustan ALTURA mínima y el “empuje” vertical
+   =============================== */
+
+/* 1) Variables de altura y desplazamiento vertical (ajusta a gusto) */
+:root{
+  --card-h: 660px;          /* altura mínima de la tarjeta */
+  --panel-h: 620px;         /* altura mínima de la columna de formularios */
+  --panel-shift-login: 12px;  /* baja un poco el LOGIN */
+  --panel-shift-signup: 18px; /* baja un poco el SIGNUP */
+}
+
+/* 2) La tarjeta más ALTA (no más ancha) */
+.card{
+  min-height: var(--card-h);
+}
+
+/* 3) Panel de formularios centrado en vertical y con “empuje” distinto por estado */
+.panel-forms{
+  min-height: var(--panel-h);
+  display: grid;
+  place-content: center;                 /* centra el bloque en vertical y horizontal */
+  padding-top: var(--panel-shift-login); /* nudge para LOGIN */
+  padding-bottom: 10px;                  /* colchón por sombras/bordes */
+  overflow: hidden;                      /* mantiene el slide limpio */
+}
+
+/* 4) En modo Signup, bajo un poquito más el formulario de registro */
+.auth.signup .panel-forms{
+  padding-top: var(--panel-shift-signup);
+}
+
+/* 5) Asegura que “Crear cuenta” no se corte por altura */
+.form-box{
+  max-height: none;  /* por si había algún tope heredado */
+}
+
+/* 6) Responsive: si quieres más alto en móvil (opcional) */
+@media (max-width: 860px){
+  :root{
+    --card-h: 720px;
+    --panel-h: 720px;
+    /* Puedes dejar los shifts igual o subirlos un pelín si lo ves alto */
+    /* --panel-shift-login: 16px;
+       --panel-shift-signup: 22px; */
+  }
+}

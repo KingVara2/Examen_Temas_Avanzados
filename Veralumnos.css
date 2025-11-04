@@ -1,0 +1,137 @@
+/* Contenedor general más ancho y centrado */
+#vaRoot {
+  padding: 24px;
+  width: 100%;
+  max-width: 1400px; /* aumenta el ancho máximo de la vista */
+  margin: 0 auto;    /* centra el contenido en el área disponible */
+}
+
+/* Header */
+.va-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.va-header h2 {
+  margin: 0;
+  font-size: 28px; /* título un poco más grande */
+  color: #e8e8f0;
+}
+.va-subtitle {
+  margin: 4px 0 0;
+  color: #9aa0aa;
+  font-size: 14px;
+}
+
+/* Info maestro */
+.va-info {
+  color: #b9c0cc;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+/* Botón */
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-primary {
+  background: #4c5cff;
+  color: white;
+}
+.btn-primary:hover { filter: brightness(1.05); }
+
+/* Una sola columna a todo el ancho para que la tabla se vea grande */
+.va-grids {
+  display: grid;
+  grid-template-columns: 1fr; /* ocupa todo el ancho */
+  gap: 20px;
+}
+
+/* Tarjeta más amplia */
+.va-card {
+  background: #171a22;
+  border: 1px solid #222736;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+.va-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #222736;
+}
+.va-card-title h3 {
+  margin: 0 0 4px 0;
+  color: #e8e8f0;
+  font-size: 20px;
+}
+.va-card-title .va-materia {
+  color: #9aa0aa;
+  font-size: 13px;
+}
+.va-badges .badge {
+  background: #1f2433;
+  color: #c9d1e1;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  margin-left: 6px;
+  border: 1px solid #2a3144;
+}
+
+/* Tabla más grande */
+.va-table-wrap {
+  width: 100%;
+  overflow: auto;
+}
+.va-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.va-table thead th {
+  background: #0f1219;
+  color: #aab3c2;
+  text-align: left;
+  padding: 16px 20px;    /* más padding */
+  font-weight: 700;
+  font-size: 15px;       /* encabezado más grande */
+  border-bottom: 1px solid #222736;
+}
+.va-table tbody td {
+  padding: 16px 20px;    /* más padding */
+  color: #e3e6ee;
+  border-bottom: 1px solid #222736;
+  font-size: 15px;       /* texto más grande */
+  line-height: 1.35;
+}
+.va-table tbody tr:hover {
+  background: rgba(76, 92, 255, 0.07);
+}
+
+.va-empty {
+  padding: 16px 20px;
+  color: #98a2b3;
+  font-size: 14px;
+}
+
+/* Estado vacío general */
+#vaTablasGrupos:empty::before {
+  content: "No se encontraron grupos para este maestro.";
+  display: block;
+  color: #98a2b3;
+  background: #171a22;
+  border: 1px dashed #2a3144;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+}

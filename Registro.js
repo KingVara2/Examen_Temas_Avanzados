@@ -1,48 +1,95 @@
-document.querySelector("form").addEventListener("submit", function(event) {
-    event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('formRegistro');
+  const selGrupo = document.getElementById('grupo');
 
-    // Obtener los valores de los campos del formulario
-    const nombre = document.querySelector("input[placeholder='Ingresa tu nombre(s)']").value;
-    const apellidos = document.querySelector("input[placeholder='Ingresa tus apellidos']").value;
-    const numeroControl = document.querySelector("input[name='numeroControl']").value;
-    const correoElectronico = document.querySelector("input[placeholder='Ingresa tu correo']").value;
-    const telefono = document.querySelector("input[placeholder='Ingresa tu telefono']").value;
-    const numeroBoleto = document.querySelector("input[name='numeroBoleto']").value;
-    const tallaCamisa = document.querySelector('input[name="camisa"]:checked')?.value;
+  async function cargarGrupos() {
+    try {
+      const idCuenta = localStorage.getItem('id_maestro');
+      if (!idCuenta) return;
 
-    // Verificar que todos los campos sean válidos
-    if (!nombre || !apellidos || !numeroControl || !correoElectronico || !telefono || !numeroBoleto || !tallaCamisa) {
-        alert('Por favor, completa todos los campos.');
-        return;
+      const res = await fetch(`http://localhost:3000/alumnos/grupos-by-teacher/${encodeURIComponent(idCuenta)}`);
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || 'No se pudieron obtener los grupos');
+
+      // Limpiar y poblar
+      selGrupo.innerHTML = `<option value="" selected disabled>Selecciona un grupo</option>`;
+      data.grupos.forEach(g => {
+        const opt = document.createElement('option');
+        opt.value = g.id_grupo; // este es el que se manda al backend
+        opt.textContent = `${g.nombre_grupo} · ${g.nombre_materia}`;
+        selGrupo.appendChild(opt);
+      });
+    } catch (e) {
+      console.error('Error cargando grupos:', e);
+      if (window.Swal) Swal.fire('Error', 'No se pudieron cargar los grupos del maestro.', 'error');
     }
+  }
 
-    // Enviar los datos al servidor usando Fetch API
-    fetch('http://localhost:3000/registro', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+  // Cargar grupos al abrir la vista de registro
+  cargarGrupos();
+
+  if (form) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      let numero_control = document.querySelector("#numeroControl").value.trim();
+      let nombre = document.querySelector("#nombre").value.trim();
+      let apellidos = document.querySelector("#apellidos").value.trim();
+      const carrera = document.querySelector("#carrera").value;
+      const semestre = parseInt(document.querySelector("#semestre").value, 10);
+
+      const unidad1 = parseFloat(document.querySelector("#materia1").value || 0);
+      const unidad2 = parseFloat(document.querySelector("#materia2").value || 0);
+      const unidad3 = parseFloat(document.querySelector("#materia3").value || 0);
+      const asistencia = parseFloat(document.querySelector("#materia4").value || 100);
+
+      const factores = Array.from(document.querySelectorAll("input[name='factores[]']:checked")).map(f => f.value);
+      const idGrupo = parseInt(document.querySelector("#grupo").value, 10);
+      const idCuenta = parseInt(localStorage.getItem('id_maestro'), 10);
+
+      // Validaciones rápidas omitidas por brevedad...
+
+      try {
+        const res = await fetch("http://localhost:3000/alumnos/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            numeroControl: numero_control,
             nombre,
             apellidos,
-            numeroControl,
-            correoElectronico,
-            telefono,
-            numeroBoleto,
-            tallaCamisa,
-            pagado: 0
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
+            carrera,
+            semestre,
+            materia1: unidad1,
+            materia2: unidad2,
+            materia3: unidad3,
+            materia4: asistencia,
+            factores,
+            idGrupo,
+            idCuenta // <--- enviar id_cuenta
+          })
+        });
+
+        const data = await res.json();
+
+        await Swal.fire({
+          icon: data.success ? 'success' : 'error',
+          title: data.success ? 'Éxito' : 'Error',
+          text: data.message
+        });
+
         if (data.success) {
-            alert(data.message);  // Mostrar el mensaje del servidor
-        } else {
-            alert('Hubo un error en el registro');
+          form.reset();
+          // Restablece defaults si quieres
+          document.querySelector("#materia1").value = "";
+          document.querySelector("#materia2").value = "";
+          document.querySelector("#materia3").value = "";
+          document.querySelector("#materia4").value = "";
+          document.querySelector("#grupo").selectedIndex = 0;
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error en la comunicación con el servidor');
+      } catch (error) {
+        console.error("Error al enviar:", error);
+        Swal.fire({ icon: 'error', title: 'Error', text: "Error de conexión con el servidor" });
+      }
     });
+  }
 });

@@ -1,0 +1,21 @@
+<div id="paretoRoot">
+  <div class="pa-header">
+    <div>
+      <h2>Diagrama de Pareto</h2>
+      <p class="pa-subtitle">Factores que más afectan a los estudiantes por grupo</p>
+    </div>
+    <div class="pa-actions">
+      <label for="paSelectGrupo" class="pa-label">Grupo:</label>
+      <select id="paSelectGrupo" class="pa-select" aria-label="Selecciona grupo"></select>
+      <button id="paRefresh" class="pa-btn">Actualizar</button>
+    </div>
+  </div>
+
+  <div class="pa-card">
+    <canvas id="paretoChart" height="360"></canvas>
+  </div>
+
+  <div class="pa-hint">
+    Consejo: el eje de barras muestra la frecuencia por código de factor (F01..F08). La línea naranja es el porcentaje acumulado.
+  </div>
+</div>

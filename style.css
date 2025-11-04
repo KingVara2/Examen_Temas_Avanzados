@@ -1,200 +1,370 @@
+/* =========================================
+   IMPORTACIÓN DE FUENTES
+   Carga la familia tipográfica global para la interfaz
+   ========================================= */
 @import url('https://fonts.googleapis.com/css?family=Poppins');
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+/* ============= Aqui termina seccion IMPORTACIÓN DE FUENTES ============= */
+
+
+/* =========================================
+   VARIABLES – MODO OSCURO ÚNICO
+   Paleta, superficies y efectos para todo el sitio
+   ========================================= */
+:root{
+  /* Fondo oscuro con leve halo superior */
+  --bg-grad-a:#0f172a;   /* slate-900 */
+  --bg-grad-b:#1f2937;   /* gray-800 */
+
+  /* Texto */
+  --text:#e5e7eb;        /* slate-200 */
+  --text-muted:#94a3b8;  /* slate-400 */
+
+  /* Campos y bordes (glass oscuro) */
+  --input-bg:#3a3f58;
+  --input-border:#56607a;
+
+  /* Glass del contenedor y de elementos */
+  --card-bg-glass: linear-gradient(180deg, rgba(24,27,44,.62), rgba(24,27,44,.48));
+  --card-border-glass: rgba(255,255,255,.12);
+  --card-shadow: 0 20px 40px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
+
+  --glass-field-bg: rgba(24,27,44,.44);
+  --glass-field-border: rgba(255,255,255,.14);
+
+  /* Botón primario tipo login */
+  --btn-grad-a:#6C63FF;   /* morado */
+  --btn-grad-b:#38E1FF;   /* cian */
+  --btn-grad-c:#FFD6E7;   /* rosa suave */
+
+  /* Realce y constantes */
+  --ring:#8b5cf6;
+  --shadow:0 10px 25px rgba(0,0,0,.25);
+  --radius:16px;
+  --gap:16px;
+}
+/* ============= Aqui termina seccion VARIABLES – MODO OSCURO ÚNICO ============= */
+
+
+/* =========================================
+   RESETEO BÁSICO
+   Normaliza márgenes, padding y box model. Define la fuente por defecto.
+   ========================================= */
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:'Poppins',sans-serif;
+}
+/* ============= Aqui termina seccion RESETEO BÁSICO ============= */
+
+
+/* =========================================
+   FONDO DEL DOCUMENTO
+   Fondo oscuro con halo superior y centrado del contenido
+   ========================================= */
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(60% 40% at 50% 0%, rgba(148,163,184,.14), transparent 60%),
+    linear-gradient(135deg,var(--bg-grad-a),var(--bg-grad-b));
+  color:var(--text);
+}
+/* ============= Aqui termina seccion FONDO DEL DOCUMENTO ============= */
+
+
+/* =========================================
+   CONTENEDOR PRINCIPAL (CARD)
+   Caja glass oscura con blur y brillo sutil
+   ========================================= */
+.container{
+  width:min(980px,100%);
+  background: var(--card-bg-glass);
+  border: 1px solid var(--card-border-glass);
+  border-radius: var(--radius);
+  padding: 28px clamp(20px,5vw,48px);
+  box-shadow: var(--card-shadow);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-body {
-    display: flex;
-    height: 110vh;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    background: linear-gradient(135deg, #71b7e6, #9b59b6);
+/* Sutil brillo diagonal tipo glass (no interactúa) */
+.container::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(60% 20% at 80% 0%, rgba(255,255,255,.10), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+  pointer-events:none;
+}
+/* ============= Aqui termina seccion CONTENEDOR PRINCIPAL (CARD) ============= */
+
+
+/* =========================================
+   TÍTULO DEL FORMULARIO
+   Estilo del título y subrayado decorativo
+   ========================================= */
+.container .title{
+  font-size:28px;
+  font-weight:600;
+  letter-spacing:.2px;
+  margin-bottom:22px;
+  position:relative;
+  color:inherit;
+}
+.container .title::before{
+  content:'';
+  position:absolute;
+  left:0;bottom:-8px;
+  height:3px;width:44px;
+  border-radius:2px;
+  background:linear-gradient(135deg,var(--btn-grad-a),var(--btn-grad-b));
+}
+/* ============= Aqui termina seccion TÍTULO DEL FORMULARIO ============= */
+
+
+/* =========================================
+   GRID GENERAL DEL FORMULARIO
+   Distribución de campos en dos columnas con gap variable
+   ========================================= */
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(240px,1fr));
+  gap:var(--gap);
+  margin-top:18px;
+}
+/* ============= Aqui termina seccion GRID GENERAL DEL FORMULARIO ============= */
+
+
+/* =========================================
+   CAMPOS DE ENTRADA
+   Cajas, labels, inputs, selects y textareas con estilos y foco
+   ========================================= */
+.input-box{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.input-box .detalles{
+  font-weight:600;
+  color:var(--text);
+}
+.input-box input,
+.input-box select,
+.input-box textarea{
+  width:100%;
+  height:46px;
+  padding:0 14px;
+  border-radius:12px;
+  border:1px solid var(--glass-field-border);
+  background: var(--glass-field-bg);
+  color:var(--text);
+  font-size:15px;
+  transition:.2s ease;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.input-box textarea{
+  height:auto;min-height:100px;
+  padding:12px 14px;
+  resize:vertical;
+}
+.input-box input::placeholder,
+.input-box textarea::placeholder{
+  color:rgba(226,232,240,.55); /* slate-200 ~ */
+}
+.input-box input:focus,
+.input-box select:focus,
+.input-box textarea:focus{
+  outline:none;
+  border-color:var(--ring);
+  box-shadow:0 0 0 4px rgba(139,92,246,.18);
 }
 
-.container {
-    position:absolute;
-    top: 150px;
-    bottom: 10px;
-    max-height: 520px;
-    max-width: 700px;
-    width: 100%;
-    background: #ffff;
-    padding: 15px 80px;
-    border-radius: 15px;
+/* corrige selector del CSS original (antes tenía un selector erróneo) */
+.user-detalles .input-box .detalles{display:block;margin-bottom:2px}
+/* ============= Aqui termina seccion CAMPOS DE ENTRADA ============= */
+
+
+/* =========================================
+   SECCIONES Y SUBTÍTULOS
+   Bloques agrupados (Calificaciones, Factores, etc.)
+   ========================================= */
+.section{
+  margin-top:24px;
+}
+.section-title{
+  font-size:18px;
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:12px;
+  position:relative;
+}
+.section-title::after{
+  content:'';
+  display:block;
+  height:2px;width:32px;margin-top:8px;
+  background:linear-gradient(135deg,var(--btn-grad-a),var(--btn-grad-b));
+  border-radius:2px;
+}
+/* ============= Aqui termina seccion SECCIONES Y SUBTÍTULOS ============= */
+
+
+/* =========================================
+   CALIFICACIONES – GRID
+   Tres columnas responsivas para las unidades
+   ========================================= */
+.grades-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(160px,1fr));
+  gap:var(--gap);
+}
+/* ============= Aqui termina seccion CALIFICACIONES – GRID ============= */
+
+
+/* =========================================
+   FACTORES (F01–F08)
+   Tarjetas clicables con checkbox y textos (glass oscuro)
+   ========================================= */
+.factors{
+  list-style:none;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(260px,1fr));
+  gap:var(--gap);
+  padding:4px 0;
+}
+.factor-card{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:14px 16px;
+  border:1px solid var(--glass-field-border);
+  border-radius:16px;
+  background: var(--glass-field-bg);
+  transition:border-color .2s ease, box-shadow .2s ease, transform .08s ease, background-color .2s ease;
+  cursor:pointer;
+  user-select:none;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.factor-card:hover{
+  border-color:var(--ring);
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
+}
+.factor-card:active{ transform:scale(.995) }
+.factor-card input[type="checkbox"]{
+  width:18px;height:18px;margin-top:2px;
+  accent-color:var(--ring);
+  flex:0 0 auto;
+}
+.factor-text{display:block;line-height:1.25}
+.factor-text strong{display:block;font-size:14px;color:var(--text)}
+.factor-text small{display:block;color:var(--text-muted);margin-top:4px}
+/* ============= Aqui termina seccion FACTORES (F01–F08) ============= */
+
+
+/* =========================================
+   BOTONES DE ACCIÓN
+   Primario con gradiente tipo login y centrado
+   ========================================= */
+.actions{
+  display:flex;
+  gap:24px;
+  margin-top:28px;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
 }
 
-.container .title {
-    font-size: 25px;
-    font-weight: 500;
-    position: relative;
+.btn{
+  height:48px;
+  padding:0 22px;
+  border-radius:28px;          /* pastilla */
+  border:0;
+  font-weight:600;
+  letter-spacing:.3px;
+  cursor:pointer;
+  transition:.2s ease;
+  box-shadow: 0 10px 20px rgba(0,0,0,.25);
 }
-
-.container .title::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 3px;
-    width: 30px;
-    background: linear-gradient(135deg, #71b7e6, #9b59b6);
+.btn.primary{
+  color:#0b2440; /* contraste sobre el gradiente claro */
+  background: linear-gradient(90deg,
+                var(--btn-grad-a) 0%,
+                var(--btn-grad-b) 55%,
+                var(--btn-grad-c) 100%);
+  width: clamp(220px, 36vw, 420px);
 }
-
-.container form .user-detalles {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 20px 0 12px 0;
+.btn.primary:hover{
+  filter:brightness(1.05);
 }
-
-form .user-detalles .input-box {
-    margin-bottom: 15px;
-    width: calc(100% / 2 - 20px);
+.btn.ghost{
+  background:transparent;
+  color:var(--text);
+  border:2px solid rgba(255,255,255,.0);
 }
-
-.user-detalles .input-box .user-detalles {
-    display: block;
-    font-weight: 500;
-    margin-bottom: 5px;
+.btn.ghost:hover{
+  background:rgba(255,255,255,.08);
+  color:var(--text);
 }
+/* ============= Aqui termina seccion BOTONES DE ACCIÓN ============= */
 
-.user-detalles .input-box input {
-    height: 45px;
-    width: 100%;
-    outline: none;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    padding-left: 15px;
-    font-size: 16px;
-    border-bottom-width: 2px;
-    transition: all 0.3s ease;
+
+/* =========================================
+   RESPONSIVE
+   Ajustes de columnas para tablets y móviles
+   ========================================= */
+@media (max-width: 992px){
+  .factors{ grid-template-columns:1fr 1fr }
+  .grades-grid{ grid-template-columns:repeat(2,1fr) }
 }
+@media (max-width: 640px){
+  .form-grid{ grid-template-columns:1fr }
+  .grades-grid{ grid-template-columns:1fr }
+  .factors{ grid-template-columns:1fr }
+  .btn.primary{ width:100% }
+}
+/* ============= Aqui termina seccion RESPONSIVE ============= */
 
+
+/* =========================================
+   BARRA DE LOGOS (estilo heredado)
+   Apariencia consistente en oscuro
+   ========================================= */
+.logos{
+  position:fixed;
+  top:15px;left:200px;
+  max-height:80px;height:100%;
+  max-width:1200px;width:100%;
+  background:#242526;
+  color:#e5e7eb;
+  padding:10px 20px;border-radius:15px;
+  text-align:center;
+  box-shadow:0 2px 5px rgba(0, 0, 0, 0.6);
+  z-index:999;
+}
+/* ============= Aqui termina seccion BARRA DE LOGOS ============= */
+
+
+/* =========================================
+   COMPATIBILIDAD Y ESTILOS ORIGINALES CONSERVADOS
+   Reglas previas que se mantienen para otros módulos
+   ========================================= */
 .user-detalles .input-box input:focus,
-.user-detalles .input-box input:valid {
-    border-color: #9b59b6;
+.user-detalles .input-box input:valid{
+  border-color:var(--ring);
 }
 
-form .camisa-detalles .camisa-title {
-    font-size: 20px;
-    font-weight: 500;
+/* Botón por si usas form .button input aún en otros módulos */
+form .button{ height:45px; margin:25px 0 }
+form .button input{
+  height:100%; width:100%; outline:none; color:#fff; border:none;
+  font-size:18px; font-weight:500; border-radius:5px; letter-spacing:1px;
+  background:linear-gradient(135deg,var(--bg-grad-a),var(--bg-grad-b));
 }
-
-form .camisa-detalles .category {
-    display: flex;
-    width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
-    margin: 14px 0;
-    justify-content: space-between; /* Distribuye el espacio entre las opciones */
-    flex-wrap: nowrap; /* Evita que las opciones se envuelvan a la siguiente línea */
-}
-
-form input[type="radio"] {
-    display: none;
-}
-
-.camisa-detalles .category label {
-    display: flex;
-    align-items: center;
-    margin-right: 10px; /* Reduce el margen entre las opciones */
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-}
-
-.camisa-detalles .category .dot {
-    height: 18px;
-    width: 18px;
-    background: #d9d9d9;
-    border-radius: 50%;
-    margin-right: 10px;
-    border: 5px solid transparent;
-    transition: all 0.3s ease;
-}
-
-#dot-1:checked ~ .category label .one,
-#dot-2:checked ~ .category label .two,
-#dot-3:checked ~ .category label .three,
-#dot-4:checked ~ .category label .four {
-    border-color: #d9d9d9;
-    background: #9b59b6;
-}
-
-form .button {
-    height: 45px;
-    margin: 25px 0;
-}
-
-form .button input {
-    height: 100%;
-    width: 100%;
-    outline: none;
-    color: #fff;
-    border: none;
-    font-size: 18px;
-    font-weight: 500;
-    border-radius: 5px;
-    letter-spacing: 1px;
-    background: linear-gradient(135deg, #71b7e6, #9b59b6);
-}
-
-form .button input:hover {
-    background: linear-gradient(-135deg, #71b7e6, #9b59b6);
-}
-
-@media (max-width: 584px) {
-    .container {
-        max-width: 100%;
-    }
-    form .user-detalles .input-box {
-        margin-bottom: 15px;
-        width: 100%;
-    }
-    form .camisa-detalles .category {
-        width: 100%;
-    }
-    .container form .user-detalles {
-        max-height: 300px;
-        overflow-y: scroll;
-    }
-    .user-detalles::-webkit-scrollbar {
-        width: 0;
-    }
-}
-
-/* Barra de logos */
-.logos {
-    position: fixed; /* Fija la barra en la pantalla */
-    top: 15px;
-    left: 200px; /* Ajusta la posición para que no se solape con el menú */
-    max-height: 80px;
-    height: 100%;
-    max-width: 1200px;
-    width: 100%;
-    background: #ffff;
-    padding: 10px 20px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 999; /* Asegura que esté por encima de otros elementos */
-}
-
-body.dark .container {
-    background: #333; /* Fondo oscuro */
-    color: white; /* Texto blanco */
-}
-
-body.dark .container input {
-    background: #444; /* Campos oscuros */
-    color: white;
-    border: 1px solid #666; /* Bordes más visibles */
-}
-
-body.dark .container input::placeholder {
-    color: #bbb; /* Color de los placeholders */
-}
-
-body.dark form .button input {
-    background: linear-gradient(135deg, #71b7e6, #9b59b6); /* Color original */
-}
-    
+form .button input:hover{ background:linear-gradient(-135deg,var(--bg-grad-a),var(--bg-grad-b)) }
+/* ============= Aqui termina seccion COMPATIBILIDAD Y ESTILOS ORIGINALES CONSERVADOS ============= */

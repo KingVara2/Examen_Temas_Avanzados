@@ -1,15 +1,19 @@
 {
   "name": "proyecto",
   "version": "1.0.0",
+  "type": "module",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -17,5 +21,13 @@
     "msnodesqlv8": "^4.5.0",
     "mssql": "^11.0.1",
     "mysql": "^2.18.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KingVara2/Examen_Temas_Avanzados.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KingVara2/Examen_Temas_Avanzados/issues"
+  },
+  "homepage": "https://github.com/KingVara2/Examen_Temas_Avanzados#readme"
 }

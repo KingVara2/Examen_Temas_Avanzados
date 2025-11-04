@@ -1,0 +1,48 @@
+<div id="vaRoot">
+  <div class="va-header">
+    <div>
+      <h2>Ver Alumnos</h2>
+      <p class="va-subtitle">Alumnos del maestro actual, organizados por grupo</p>
+    </div>
+    <div class="va-actions">
+      <button id="vaRefresh" class="btn btn-primary">Actualizar</button>
+    </div>
+  </div>
+
+  <div id="vaInfoMaestro" class="va-info"></div>
+
+  <div id="vaTablasGrupos" class="va-grids">
+    <!-- Aquí se inyectan las tarjetas de cada grupo -->
+  </div>
+
+  <template id="vaCardTemplate">
+    <div class="va-card">
+      <div class="va-card-head">
+        <div class="va-card-title">
+          <h3 class="va-grupo"></h3>
+          <span class="va-materia"></span>
+        </div>
+        <div class="va-badges">
+          <span class="badge"><span class="va-semestre"></span>° Semestre</span>
+          <span class="badge"><span class="va-count"></span> alumno(s)</span>
+        </div>
+      </div>
+      <div class="va-table-wrap">
+        <table class="va-table">
+          <thead>
+            <tr>
+              <th>No. Control</th>
+              <th>Nombre</th>
+              <th>Carrera</th>
+              <th>Semestre</th>
+            </tr>
+          </thead>
+          <tbody class="va-tbody">
+            <!-- filas -->
+          </tbody>
+        </table>
+        <div class="va-empty" hidden>No hay alumnos en este grupo.</div>
+      </div>
+    </div>
+  </template>
+</div>

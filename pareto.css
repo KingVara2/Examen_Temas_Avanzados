@@ -1,0 +1,21 @@
+:root{
+  --bg:#0f1422; --card:#151926; --line:#242b3d; --text:#e8e8f0; --muted:#9aa0aa; --primary:#4c5cff; --accent:#f59e0b;
+}
+#paretoRoot{ max-width:1100px; margin:24px auto; padding:0 16px; color:var(--text); font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+.pa-header{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:14px; }
+.pa-header h2{ margin:0 0 4px; font-size:28px; }
+.pa-subtitle{ margin:0; color:var(--muted); }
+.pa-actions{ display:flex; gap:10px; align-items:center; }
+.pa-label{ color:#cbd3e6; font-weight:600; }
+.pa-select{ background:#1a2132; color:var(--text); border:1px solid var(--line); border-radius:10px; padding:8px 10px; min-width:140px; }
+.pa-btn{ border:none; border-radius:10px; padding:8px 12px; background:var(--primary); color:#fff; font-weight:600; cursor:pointer; }
+.pa-btn:hover{ filter:brightness(1.06); }
+
+.pa-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; box-shadow:0 12px 30px rgba(0,0,0,.35); }
+.pa-hint{ margin-top:10px; color:var(--muted); font-size:13px; }
+
+canvas{ width:100% !important; height:420px !important; }
+
+@media (max-width:640px){
+  .pa-header{ flex-direction:column; align-items:flex-start; }
+}

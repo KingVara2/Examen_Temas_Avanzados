@@ -1,141 +1,477 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Registro Congreso ASTRA</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="stylemenu.css"> <!-- Corregido aquí -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Boxicons CSS -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <meta charset="UTF-8" />
+  <title>Panel del Maestro • Proyecto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- ... head ... -->
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="stylemenu.css" />
+
+<!-- Coincidir mayúsculas/minúsculas con tus archivos -->
+<link rel="stylesheet" href="Importar.css" />
+<link rel="stylesheet" href="Veralumnos.css" />
+
+<!-- Librerías -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<!-- Scripts de tu UI -->
+<script src="Cerrarcesion.js" defer></script>
+<script src="Interfaz.js" defer></script>
+<script src="Registro.js" defer></script>
+
+<!-- Coincidir mayúsculas/minúsculas -->
+ <script src="crearexcel.js" defer></script> 
+<script src="Importar.js" defer></script>
+<script src="Veralumnos.js" defer></script>
+<script src="registromasivo.js" defer></script>
+<!-- Pareto -->
+<link rel="stylesheet" href="pareto.css" />
+<script src="pareto.js" defer></script>
+<!-- Diagrama de dispersión -->
+<link rel="stylesheet" href="Diagramadispersion.css" />
+<script src="Diagramadispersion.js" defer></script>
+
+<!-- Router -->
+<script defer>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Registra todas las vistas del SPA
+    const views = {
+      registro: document.getElementById('view-registro'),
+      importar: document.getElementById('view-importar'),
+      'ver-alumnos': document.getElementById('view-ver-alumnos'),
+      pareto: document.getElementById('view-pareto'),
+      dispersion: document.getElementById('view-dispersion'), // NUEVO
+    };
+
+    // Sidebar
+    const nav = document.querySelector('nav.sidebar');
+    const actionable = nav ? nav.querySelectorAll('a[data-view]') : [];
+    const disabled = nav ? nav.querySelectorAll('a[data-disabled="true"]') : [];
+
+    function setActive(hash) {
+      actionable.forEach(a => a.classList.toggle('active', a.getAttribute('href') === hash));
+    }
+
+    // ============ Lazy-load: Importar ============
+    let importarLoaded = false;
+    async function loadImportar() {
+      if (importarLoaded) return;
+      const mount = document.getElementById('importarMount');
+      if (!mount) return;
+      try {
+        const html = await fetch('Importar.html', { cache: 'no-store' }).then(r => r.text());
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        const root = tmp.querySelector('#importarRoot');
+        if (root) {
+          mount.appendChild(root);
+          if (typeof window.initImportar === 'function') window.initImportar();
+          importarLoaded = true;
+        } else {
+          console.error('No se encontró #importarRoot dentro de Importar.html');
+        }
+      } catch (e) {
+        console.error('No se pudo cargar Importar.html:', e);
+        if (window.Swal) Swal.fire('Error', 'No se pudo cargar la vista de Importar.', 'error');
+      }
+    }
+
+    // ============ Lazy-load: Ver Alumnos ============
+    let verAlumnosLoaded = false;
+    async function loadVerAlumnos() {
+      if (verAlumnosLoaded) return;
+      const mount = document.getElementById('verAlumnosMount');
+      if (!mount) return;
+      try {
+        const html = await fetch('Veralumnos.html', { cache: 'no-store' }).then(r => r.text());
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        const root = tmp.querySelector('#vaRoot');
+        if (root) {
+          mount.appendChild(root);
+          if (typeof window.initVerAlumnos === 'function') window.initVerAlumnos();
+          verAlumnosLoaded = true;
+        } else {
+          console.error('No se encontró #vaRoot dentro de Veralumnos.html');
+        }
+      } catch (e) {
+        console.error('No se pudo cargar Veralumnos.html:', e);
+        if (window.Swal) Swal.fire('Error', 'No se pudo cargar la vista de Ver Alumnos.', 'error');
+      }
+    }
+
+    // ============ Lazy-load: Pareto ============
+    let paretoLoaded = false;
+    async function loadPareto() {
+      if (paretoLoaded) return;
+      const mount = document.getElementById('paretoMount');
+      if (!mount) return;
+      try {
+        const html = await fetch('pareto.html', { cache: 'no-store' }).then(r => r.text());
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        const root = tmp.querySelector('#paretoRoot');
+        if (root) {
+          mount.appendChild(root);
+          if (typeof window.initPareto === 'function') window.initPareto();
+          paretoLoaded = true;
+        } else {
+          console.error('No se encontró #paretoRoot dentro de pareto.html');
+        }
+      } catch (e) {
+        console.error('No se pudo cargar pareto.html:', e);
+        if (window.Swal) Swal.fire('Error', 'No se pudo cargar la vista de Pareto.', 'error');
+      }
+    }
+
+    // ============ Lazy-load: Dispersión ============
+    let dispersionLoaded = false;
+    async function loadDispersion() {
+      if (dispersionLoaded) return;
+      const mount = document.getElementById('dispersionMount');
+      if (!mount) return;
+      try {
+        const html = await fetch('Diagramadispersion.html', { cache: 'no-store' }).then(r => r.text());
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        const root = tmp.querySelector('#dispersionRoot');
+        if (root) {
+          mount.appendChild(root);
+          if (typeof window.initDispersion === 'function') window.initDispersion();
+          dispersionLoaded = true;
+        } else {
+          console.error('No se encontró #dispersionRoot dentro de Diagramadispersion.html');
+        }
+      } catch (e) {
+        console.error('No se pudo cargar Diagramadispersion.html:', e);
+        if (window.Swal) Swal.fire('Error', 'No se pudo cargar la vista de Dispersión.', 'error');
+      }
+    }
+
+    // Mostrar/ocultar vistas y disparar cargas perezosas
+    function show(viewName) {
+      Object.values(views).forEach(v => v && (v.style.display = 'none'));
+      const target = views[viewName] || views.registro;
+      if (target) target.style.display = 'block';
+
+      if (viewName === 'importar') loadImportar();
+      if (viewName === 'ver-alumnos') loadVerAlumnos();
+      if (viewName === 'pareto') loadPareto();
+      if (viewName === 'dispersion') loadDispersion(); // NUEVO
+    }
+
+    // Navegación por hash
+    function handleHash() {
+      const hash = window.location.hash || '#registro';
+      const view = hash.replace('#', '') || 'registro';
+      setActive(`#${view}`);
+      show(view);
+    }
+
+    actionable.forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = a.getAttribute('href');
+        history.pushState(null, '', href);
+        handleHash();
+      });
+    });
+
+    disabled.forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (window.Swal) Swal.fire({ icon: 'info', title: 'Próximamente', timer: 1200, showConfirmButton: false });
+      });
+    });
+
+    window.addEventListener('popstate', handleHash);
+    if (!location.hash || location.hash === '#') history.replaceState(null, '', '#registro');
+    handleHash();
+  });
+</script>
+
+
+
+
 </head>
+
 <body>
-    <!-- Barra de menú -->
-    <nav class="sidebar close">
-        <header>
-            <div class="image-text">
-                <span class="image">
-                    <img src="chuy1.gif" alt="logo">
-                </span>
-                <div class="text header-text">
-                    <span class="name"><-- Este es chuy</span>
-                    <span class="profession">Perfil de maestro</span>
-                </div>
-            </div>
-            <i class='bx bx-chevron-right toggle'></i>
-        </header>
-
-        <div class="menu-bar">
-            <div class="menu">
-                <li class="search-box">
-                    <i class='bx bx-search icon'></i>
-                    <input type="search" placeholder="Search...">
-                </li>
-                <ul class="menu-links">
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-home-alt icon'></i>
-                            <span class="text nav-text">Perfil</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-user icon'></i>
-                            <span class="text nav-text">Conocenos</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-calendar icon'></i>
-                            <span class="text nav-text">Talleres</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-calendar-event icon'></i>
-                            <span class="text nav-text">Fechas</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-cog icon'></i>
-                            <span class="text nav-text">Complementos</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-slider-alt icon'></i>
-                            <span class="text nav-text">Ajustes</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="bottom-content">
-                <li class="nav-link">
-                    <a href="#">
-                        <i class='bx bx-log-out icon'></i>
-                        <span class="text nav-text">Log out</span>
-                    </a>
-                </li>
-                <li class="mode">
-                    <div class="moon-sun">
-                        <i class='bx bx-moon icon moon'></i>
-                        <i class='bx bx-sun icon sun'></i>
-                    </div>
-                    <span class="mode-text text">Dark mode</span>
-                    <div class="toggle-switch">
-                        <span class="switch"></span>
-                    </div>
-                </li>
-            </div>
+  <!-- Barra lateral -->
+  <nav class="sidebar close">
+    <header>
+      <div class="image-text">
+        <span class="image">
+          <img src="chuy1.gif" alt="logo">
+        </span>
+        <div class="text header-text">
+          <span class="name"><-- Este es chuy</span>
+          <span class="profession">Perfil de maestro</span>
         </div>
-    </nav>
+      </div>
+      <i class='bx bx-chevron-right toggle'></i>
+    </header>
 
-    <script src="Interfaz.js"></script>
-   
+    <div class="menu-bar">
+      <div class="menu">
+        <!-- Buscar -->
+        <li class="search-box">
+          <i class='bx bx-search icon'></i>
+          <input type="search" placeholder="Search...">
+        </li>
 
-    <!-- Contenedor del formulario -->
-    <div class="container">
-        <div class="title">Registro alumno</div>
-        <form action="#">
-            <div class="user-detalles">
-                <div class="input-box">
-                    <span class="detalles">Nombre</span>
-                    <input type="text" placeholder="Ingresa tu nombre(s)" required>
-                </div>
-                <div class="input-box">
-                    <span class="detalles">Apellidos</span>
-                    <input type="text" placeholder="Ingresa tus apellidos" required>
-                </div>
-                <div class="input-box">
-                    <span class="detalles">Numero de control</span>
-                    <input type="text" name="numeroControl" placeholder="Ingresa tu No. Control" required>
-                </div>
-               
-            
+        <!-- SOLO ESTOS DOS NAVEGAN -->
+        <li class="nav-link">
+          <a href="#registro" data-view="registro">
+            <i class='bx bx-file icon'></i>
+            <span class="text nav-text">Registro</span>
+          </a>
+        </li>
+
+        <li class="nav-link">
+          <a href="#importar" data-view="importar">
+            <i class='bx bx-import icon'></i>
+            <span class="text nav-text">Importar Alumnos</span>
+          </a>
+        </li>
+
+        <!-- Los demás no hacen nada por ahora -->
+        <ul class="menu-links">
+        <li class="nav-link">
+          <a href="#ver-alumnos" data-view="ver-alumnos">
+            <i class='bx bx-show-alt icon'></i>
+            <span class="text nav-text">Ver Alumnos</span>
+          </a>
+        </li>
+
+          <li class="nav-link">
+            <a href="#dispersion" data-view="dispersion">
+              <i class='bx bx-scatter-chart icon'></i>
+              <span class="text nav-text">Diagrama Dispersión</span>
+            </a>
+          </li>
+
+          <li class="nav-link">
+            <a href="#pareto" data-view="pareto">
+              <i class='bx bx-bar-chart-alt-2 icon'></i>
+              <span class="text nav-text">Análisis Pareto</span>
+            </a>
+          </li>
+
+          <li class="nav-link">
+            <a href="#" data-disabled="true">
+              <i class='bx bx-file icon'></i>
+              <span class="text nav-text">Reporte</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bottom-content">
+       <li class="nav-link">
+        <a href="#" id="logoutBtn">
+          <i class='bx bx-log-out icon'></i>
+          <span class="text nav-text">Log out</span>
+          </a>
+        </li>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main style="width:100%;">
+    <!-- VISTA: Registro (principal y por defecto) -->
+    <section id="view-registro" class="view" style="display:block;">
+      <div class="container">
+        <div class="title">Registro de Estudiante</div>
+
+        <form id="formRegistro" action="#" novalidate>
+          <!-- GRID PRINCIPAL -->
+          <div class="user-detalles form-grid">
+            <!-- No. Control -->
+            <div class="input-box">
+              <label class="detalles" for="numeroControl">Numero de control</label>
+              <input id="numeroControl" name="numeroControl" type="text" placeholder="Ingresa tu No. Control" required />
             </div>
 
-        
-            <div class="button">
-                <input type="submit" value="Register">
+            <!-- Nombre -->
+            <div class="input-box">
+              <label class="detalles" for="nombre">Nombre</label>
+              <input id="nombre" name="nombre" type="text" placeholder="Ingresa tu nombre(s)" required />
             </div>
 
-            
-            </form>
+            <!-- Apellidos -->
+            <div class="input-box">
+              <label class="detalles" for="apellidos">Apellidos</label>
+              <input id="apellidos" name="apellidos" type="text" placeholder="Ingresa tus apellidos" required />
+            </div>
 
-            <script src="https://unpkg.com/qr-code-styling/lib/qr-code-styling.min.js"></script>
-        
+            <!-- Carrera -->
+            <div class="input-box">
+              <label class="detalles" for="carrera">Carrera</label>
+              <select id="carrera" name="carrera" required>
+                <option value="" selected disabled>Selecciona una carrera</option>
+                <option>Ingeniería en Sistemas</option>
+                <option>Ingeniería Industrial</option>
+                <option>Ingeniería Civil</option>
+                <option>Arquitectura</option>
+                <option>Administración</option>
+              </select>
+            </div>
 
-        </div>
+            <!-- Semestre -->
+            <div class="input-box">
+              <label class="detalles" for="semestre">Semestre</label>
+              <select id="semestre" name="semestre" required>
+                <option value="" selected disabled>Selecciona semestre</option>
+                <option>1</option><option>2</option><option>3</option><option>4</option>
+                <option>5</option><option>6</option><option>7</option><option>8</option>
+                <option>9</option><option>10</option><option>11</option><option>12</option>
+              </select>
+            </div>
+          </div>
 
-        <!-- Carga de scripts (fuera del formulario) -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode-styling/lib/qrcode-styling.min.js"></script>
-    <script src="Qr.js"></script>
+         <!-- Grupo -->
+          <div class="input-box">
+            <label class="detalles" for="grupo">Grupo</label>
+            <select id="grupo" name="grupo" required>
+              <option value="" selected disabled>Selecciona un grupo</option>
+              <!-- Opciones se cargan dinámicamente -->
+            </select>
+          </div>
 
-      <!--  <script src="chuy.js"></script>    --> 
+          <!-- CALIFICACIONES -->
+          <div class="section">
+            <h3 class="section-title">Calificaciones</h3>
+            <div class="grades-grid">
+              <div class="input-box">
+                <label class="detalles" for="materia1">Unidad 1</label>
+                <input id="materia1" name="materia1" type="number" min="0" max="100" step="0.1" placeholder="Ej. 85.5" />
+              </div>
+              <div class="input-box">
+                <label class="detalles" for="materia2">Unidad 2</label>
+                <input id="materia2" name="materia2" type="number" min="0" max="100" step="0.1" placeholder="Ej. 90" />
+              </div>
+              <div class="input-box">
+                <label class="detalles" for="materia3">Unidad 3</label>
+                <input id="materia3" name="materia3" type="number" min="0" max="100" step="0.1" placeholder="Ej. 78" />
+              </div>
+              <div class="input-box">
+                <label class="detalles" for="materia4">Asistencia (%)</label>
+                <input id="materia4" name="materia4" type="number" min="0" max="100" step="0.1" placeholder="Ej. 100" />
+              </div>
+            </div>
+          </div>
 
+          <!-- FACTORES -->
+          <div class="section">
+            <h3 class="section-title">Factores</h3>
+            <ul class="factors">
+              <li>
+                <label class="factor-card" title="Ausencias constantes, inasistencias prolongadas">
+                  <input type="checkbox" name="factores[]" value="F01" />
+                  <span class="factor-text">
+                    <strong>Falta de asistencia</strong>
+                    <small>Ausencias constantes</small>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="factor-card" title="No repasa, entrega tarde, bajo esfuerzo">
+                  <input type="checkbox" name="factores[]" value="F02" />
+                  <span class="factor-text">
+                    <strong>Falta de estudio o dedicación</strong>
+                    <small>Bajo esfuerzo</small>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="factor-card" title="Tiene empleo o responsabilidades que reducen tiempo">
+                  <input type="checkbox" name="factores[]" value="F03" />
+                  <span class="factor-text">
+                    <strong>Trabajo o carga laboral</strong>
+                    <small>Poco tiempo</small>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="factor-card" title="Situaciones personales que afectan el rendimiento">
+                  <input type="checkbox" name="factores[]" value="F04" />
+                  <span class="factor-text">
+                    <strong>Problemas personales o familiares</strong>
+                    <small>Afectación al rendimiento</small>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="factor-card" title="No entiende el método o el contenido">
+                  <input type="checkbox" name="factores[]" value="F05" />
+                  <span class="factor-text">
+                    <strong>Dificultad con el docente o la materia</strong>
+                    <small>Dudas con el método</small>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="factor-card" title="No puede pagar transporte, materiales, etc.">
+                  <input type="checkbox" name="factores[]" value="F06" />
+                  <span class="factor-text">
+                    <strong>Problemas económicos</strong>
+                    <small>Limitaciones de recursos</small>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="factor-card" title="Desmotivación o cambio de vocación">
+                  <input type="checkbox" name="factores[]" value="F07" />
+                  <span class="factor-text">
+                    <strong>Falta de interés o cambio de carrera</strong>
+                    <small>Desmotivación</small>
+                  </span>
+                </label>
+              </li>
+              <li>
+                <label class="factor-card" title="Enfermedades o limitaciones físicas/mentales">
+                  <input type="checkbox" name="factores[]" value="F08" />
+                  <span class="factor-text">
+                    <strong>Problemas de salud</strong>
+                    <small>Condición médica</small>
+                  </span>
+                </label>
+              </li>
+            </ul>
+          </div>
 
-    <script src="registro.js"> </script>   
-    <script src="Validacion.js"></script>
+          <!-- BOTONES -->
+          <div class="actions">
+            <button type="submit" class="btn primary">Guardar</button>
+            <button type="button" class="btn primary" onclick="document.getElementById('formRegistro').reset()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- VISTA: Importar (se carga importar.html aquí, sin salir de la página) -->
+    <section id="view-importar" class="view" style="display:none;">
+      <div id="importarMount"></div>
+    </section>
+    <!-- VISTA: Ver Alumnos (se carga VerAlumnos.html aquí, sin salir de la página) -->
+    <section id="view-ver-alumnos" class="view" style="display:none;">
+      <div id="verAlumnosMount"></div>
+    </section>
+    <!-- VISTA: Pareto (se carga pareto.html aquí, sin salir de la página) -->
+    <section id="view-pareto" class="view" style="display:none;">
+      <div id="paretoMount"></div>
+    </section>
+  </main>
+  <!-- VISTA: Dispersión (se carga Diagramadispersion.html aquí, sin salir de la página) -->
+    <section id="view-dispersion" class="view" style="display:none;">
+      <div id="dispersionMount"></div>
+    </section>
+  
+  <script src="/js/VerAlumnos.js" defer></script>
+  <script src="/js/Pareto.js" defer></script>
+  <script src="/js/Diagramadispersion.js" defer></script>
 </body>
 </html>

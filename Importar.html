@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Importar Alumnos</title>
+  <link rel="stylesheet" href="./importar.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+  <script src="./importar.js" defer></script>
+</head>
+<body>
+  <section id="importarRoot" class="panel">
+    <header class="panel__header">
+      <div>
+        <h1 class="title">Importar Alumnos</h1>
+        <p class="subtitle">Sube un archivo .xlsx, .xls o .csv para previsualizar los registros.</p>
+      </div>
+    </header>
+
+    <div class="u-grid">
+      <!-- Tarjeta de acciones -->
+      <div class="card">
+        <div class="toolbar">
+         <button id="btnDescargarPlantilla" class="btn">Descargar plantilla</button>
+
+          <div class="limit">
+            <label for="maxRowsSelect">Límite por carga:</label>
+            <select id="maxRowsSelect">
+              <option value="50" selected>50</option>
+              <option value="30">30</option>
+            </select>
+          </div>
+
+          <div class="spacer"></div>
+
+          <button id="btnEnviar" class="btn btn-secondary" disabled>Enviar registros</button>
+        </div>
+
+        <div id="dropzone" class="dropzone" tabindex="0">
+          <div class="dropzone__icon">⬆</div>
+          <div class="dropzone__text">
+            Arrastra y suelta tu archivo aquí
+            <span class="muted">o</span>
+            <label for="excelFile" class="link">selecciona un archivo</label>
+          </div>
+          <input id="excelFile" type="file" accept=".xlsx,.xls,.csv" hidden />
+          <div id="fileInfo" class="fileinfo" aria-live="polite"></div>
+        </div>
+
+        <div class="actions">
+          <button id="btnCargar" class="btn btn-primary">Visualizar Archivo</button>
+          <button id="btnLimpiar" class="btn btn-ghost">Limpiar</button>
+        </div>
+
+        <div class="hints">
+          <strong>Columnas esperadas (sugerido):</strong>
+          <code>numero_control, nombre, apellidos, carrera, semestre, grupo, unidad1, unidad2, unidad3, asistencia, factores</code>
+          <div class="muted">Se leerá la primera hoja del archivo por defecto. “factores” admite hasta 2 códigos separados por coma o punto y coma (ej. F01;F03).</div>
+        </div>
+
+        <details class="catalogo">
+          <summary>Ver catálogo de factores de riesgo</summary>
+          <ul class="cat-list">
+            <li><code>F01</code> — Falta de asistencia: Ausencias constantes, inasistencias prolongadas</li>
+            <li><code>F02</code> — Falta de estudio o dedicación: No repasa, entrega tarde, bajo esfuerzo</li>
+            <li><code>F03</code> — Trabajo o carga laboral: Tiene empleo o responsabilidades que reducen tiempo</li>
+            <li><code>F04</code> — Problemas personales o familiares: Situaciones personales que afectan el rendimiento</li>
+            <li><code>F05</code> — Dificultad con el docente o la materia: No entiende el método o el contenido</li>
+            <li><code>F06</code> — Problemas económicos: No puede pagar transporte, materiales, etc.</li>
+            <li><code>F07</code> — Falta de interés o cambio de carrera: Desmotivación o cambio de vocación</li>
+            <li><code>F08</code> — Problemas de salud: Enfermedades o limitaciones físicas/mentales</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- Resumen y validaciones -->
+      <div class="card stats">
+        <div class="stat">
+          <div class="stat__label">Fila(s)</div>
+          <div class="stat__value" id="rowCount">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">Hoja</div>
+          <div class="stat__value" id="sheetName">—</div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">Archivo</div>
+          <div class="stat__value" id="fileName">—</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div id="validationBox" class="validation hidden" aria-live="polite"></div>
+      </div>
+
+      <!-- Tabla de previsualización -->
+      <div class="card">
+        <div class="table-wrap">
+          <table class="table" id="previewTable" aria-live="polite">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="muted small">Se muestran hasta 50 filas como previsualización.</div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

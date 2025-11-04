@@ -1,0 +1,45 @@
+<div id="dispersionRoot">
+  <div class="ds-header">
+    <div>
+      <h2>Diagrama de Dispersión</h2>
+      <p class="ds-subtitle">Explora la relación entre variables del desempeño en un grupo</p>
+    </div>
+
+    <div class="ds-controls">
+      <label class="ds-label" for="dsSelectGrupo">Grupo:</label>
+      <select id="dsSelectGrupo" class="ds-select" aria-label="Selecciona grupo"></select>
+
+      <label class="ds-label" for="dsSelectX">Eje X:</label>
+      <select id="dsSelectX" class="ds-select" aria-label="Selecciona variable X">
+        <option value="asistencia" selected>Asistencia (%)</option>
+        <option value="unidad1">Unidad 1</option>
+        <option value="unidad2">Unidad 2</option>
+        <option value="unidad3">Unidad 3</option>
+      </select>
+
+      <label class="ds-label" for="dsSelectY">Eje Y:</label>
+      <select id="dsSelectY" class="ds-select" aria-label="Selecciona variable Y">
+        <option value="calificacion_final" selected>Calificación Final</option>
+        <option value="unidad1">Unidad 1</option>
+        <option value="unidad2">Unidad 2</option>
+        <option value="unidad3">Unidad 3</option>
+        <option value="asistencia">Asistencia (%)</option>
+      </select>
+
+      <button id="dsRefresh" class="ds-btn">Actualizar</button>
+    </div>
+  </div>
+
+  <div class="ds-card">
+    <div class="ds-meta">
+      <span id="dsResumen">—</span>
+    </div>
+    <div class="ds-canvas-wrap">
+      <canvas id="dispersionChart" height="360"></canvas>
+    </div>
+  </div>
+
+  <div class="ds-hint">
+    Consejos: cada punto es un alumno. La línea indica la tendencia lineal. r es la correlación de Pearson (entre -1 y 1), r² la varianza explicada.
+  </div>
+</div>

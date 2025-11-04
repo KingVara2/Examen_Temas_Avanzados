@@ -21,15 +21,5 @@ document.addEventListener("DOMContentLoaded", function() {
         sidebar.classList.add("close");
     });
 
-    // Función para el cambio de modo oscuro/claro
-    modeSwitch.addEventListener("click", () => {
-        body.classList.toggle("dark");
-
-        // Cambiar el texto del modo
-        modeText.innerText = body.classList.contains("dark") ? "Light Mode" : "Dark Mode";
-
-        // Cambiar el modo oscuro en el formulario también
-        const container = body.querySelector(".container");
-        container.classList.toggle("dark");
-    });
+    
 });
